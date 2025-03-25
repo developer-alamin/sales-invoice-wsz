@@ -18,9 +18,22 @@ Route::get('/language/{locale}', function ($locale) {
     return redirect()->back();
 });
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+Route::prefix('admin')
+->as('admin.')
+->middleware(['auth', 'verified'])
+->group(function () {
+    Route::get('dashboard', function () {
+        return view('dashboard');
+    })->name('dashboard');
+
+    Route::get('/order-create',function(){
+        return view('pages.orders.create');
+    })->name('order.create');
+});
+
+// Route::get('/dashboard', function () {
+//     return view('dashboard');
+// })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
